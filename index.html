@@ -13,10 +13,11 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
-  overflow: hidden; /* biar animasi keluar halaman ga scroll */
+  overflow: hidden;
 }
-
 .container {
+  position: relative;
+  z-index: 10; /* Supaya form/input berada di atas balon & assets */
   background: rgba(255,255,255,0.95);
   padding: 30px;
   border-radius: 20px;
@@ -26,7 +27,6 @@ body {
   max-height: 90vh;
   overflow-y: auto;
 }
-
 input, select, button {
   margin: 10px 0;
   padding: 10px;
@@ -43,17 +43,14 @@ button {
   transition: 0.3s;
 }
 button:hover { background: #ff758c; }
-
 .hidden { display: none !important; }
 .result { font-weight: bold; margin-top: 15px; font-size: 16px; }
-
 .message-box { 
   display: flex;
   flex-direction: column;
   gap: 40px; 
   margin-top: 20px;
 }
-
 .message-item {
   display: flex;
   flex-direction: row;
@@ -61,10 +58,8 @@ button:hover { background: #ff758c; }
   gap: 20px;
   justify-content: center;
 }
-
 .message-item.left { justify-content: flex-start; }
 .message-item.right { justify-content: flex-end; }
-
 .message-text {
   text-align: center;
   font-size: 16px;
@@ -75,7 +70,6 @@ button:hover { background: #ff758c; }
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
-
 .message-img {
   width: 140px;
   height: 140px;
@@ -85,7 +79,6 @@ button:hover { background: #ff758c; }
   transform: rotate(-8deg);
   transition: opacity 2.5s ease, transform 1.5s ease;
 }
-
 .overlay {
   position: fixed;
   top:0; left:0;
@@ -96,7 +89,6 @@ button:hover { background: #ff758c; }
   align-items: center;
   z-index: 1000;
 }
-
 .music-box {
   background: white;
   padding: 20px 30px;
@@ -104,7 +96,6 @@ button:hover { background: #ff758c; }
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
   text-align: center;
 }
-
 .music-box button {
   margin: 10px; padding: 10px 20px;
   border-radius: 8px; border: none;
@@ -120,9 +111,10 @@ button:hover { background: #ff758c; }
   width: 50px;
   height: 70px;
   background: radial-gradient(circle at 30% 30%, #ff9ce1, #ff61a6);
-  border-radius: 50% 50% 50% 50%;
+  border-radius: 50%;
   opacity: 0.8;
   animation: floatUp linear infinite;
+  z-index: 1; /* supaya muncul di belakang container */
 }
 @keyframes floatUp {
   0% { transform: translateY(0) rotate(0deg); opacity: 0; }
@@ -136,8 +128,8 @@ button:hover { background: #ff758c; }
   font-size: 24px;
   opacity: 0.7;
   animation: moveAsset linear infinite;
+  z-index: 1; /* supaya muncul di belakang container */
 }
-
 @keyframes moveAsset {
   0% { transform: translateY(0); }
   50% { transform: translateY(-20px); }
@@ -149,63 +141,59 @@ button:hover { background: #ff758c; }
 
 <!-- Intro Overlay -->
 <div id="introOverlay" style="
-  position: fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background:black;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-  z-index:2000;
+  position: fixed; top:0; left:0; width:100%; height:100%;
+  background:black; display:flex; justify-content:center; align-items:center;
+  flex-direction:column; z-index:2000;
 ">
   <p style="color:white; font-size:24px; margin-bottom:30px; text-align:center;">
     Kalo kamu Dedekk pencet lanjut
   </p>
   <button onclick="startIntro()" style="
-    padding: 15px 40px;
-    font-size:20px;
-    background:white;
-    color:black;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-    transition:0.3s;
+    padding: 15px 40px; font-size:20px; background:white; color:black;
+    border:none; border-radius:10px; cursor:pointer; transition:0.3s;
   " onmouseover="this.style.background='black'; this.style.color='white';"
-     onmouseout="this.style.background='white'; this.style.color='black';">
-     Lanjut
+    onmouseout="this.style.background='white'; this.style.color='black';">
+    Lanjut
   </button>
 </div>
-  
+
 <div class="container">
   <h2>🎂 Selamat Ulang Tahun Dedekk! 🎂</h2>
 
-  <div id="step1">
+  <!-- Step 1: Nama -->
+  <div id="step1" class="hidden">
     <input type="text" id="nameInput" placeholder="Masukkan nama panggilan" onclick="showMusicOverlay()">
     <button onclick="checkName()">Next</button>
     <p id="errorMsg" style="color:red;"></p>
   </div>
 
- <!-- Step 2a: Cewek Zaky -->
-<div id="step2a" class="hidden">
-  <p>Kamu ceweknya Zaky apa bukan?</p>
-  <select id="answerSelect1">
-    <option value="">-- Pilih jawaban --</option>
-    <option value="iya">Iya</option>
-    <option value="bukan">Bukan</option>
-  </select>
-  <button onclick="checkZaky()">Next</button>
+  <!-- Step 2a: Cewek Zaky -->
+  <div id="step2a" class="hidden">
+    <p>Kamu ceweknya Zaky apa bukan?</p>
+    <select id="answerSelect1">
+      <option value="">-- Pilih jawaban --</option>
+      <option value="iya">Iya</option>
+      <option value="bukan">Bukan</option>
+    </select>
+    <button onclick="checkZaky()">Next</button>
+  </div>
+
+  <!-- Step 2b: Tebak warna -->
+  <div id="step2b" class="hidden">
+    <p>Aku masih gayakin kalo ini Dedekk. Coba tebak apa warna kesukaan Dedekk?</p>
+    <input type="text" id="answerInput" placeholder="Tebak warna kesukaan">
+    <button onclick="verifyPink()">Verifikasi</button>
+    <p class="result" id="verifyResult"></p>
+    <button id="nextMessageBtn" class="hidden" onclick="goToMessages()">Lanjut ➡️</button>
+  </div>
+
+  <!-- Step 3: Messages -->
+  <div id="stepMessage" class="hidden">
+    <div id="messageBox" class="message-box"></div>
+  </div>
 </div>
 
-<!-- Step 2b: Tebak warna -->
-<div id="step2b" class="hidden">
-  <p>Aku masih gayakin kalo ini Dedekk. Coba tebak apa warna kesukaan Dedekk?</p>
-  <input type="text" id="answerInput" placeholder="Tebak warna kesukaan">
-  <button onclick="verifyPink()">Verifikasi</button>
-  <p class="result" id="verifyResult"></p>
-  <button id="nextMessageBtn" class="hidden" onclick="goToMessages()">Lanjut ➡️</button>
-</div>
-
+<!-- Music Overlay -->
 <div id="musicOverlay" class="overlay hidden">
   <div class="music-box">
     <p>Mau pake background music nggak?</p>
@@ -219,9 +207,8 @@ button:hover { background: #ff758c; }
   Browser kamu tidak mendukung audio.
 </audio>
 
-<!-- BALON DAN ASSETS -->
 <script>
-// buat balon random
+// === BALON & ASSETS ===
 function createBalloons(num){
   for(let i=0;i<num;i++){
     let b = document.createElement("div");
@@ -233,8 +220,6 @@ function createBalloons(num){
     document.body.appendChild(b);
   }
 }
-
-// buat assets lucu (★, 💖, 🎈)
 function createAssets(num){
   const icons = ["★","💖","🎀","🍬","🎵","🎉"];
   for(let i=0;i<num;i++){
@@ -248,19 +233,15 @@ function createAssets(num){
     document.body.appendChild(a);
   }
 }
-
 createBalloons(12);
 createAssets(15);
-</script>
 
-<script>
-// === kode typewriter & verifikasi ===
+// === LOGIC ===
 let musicAsked = false;
 const music = document.getElementById("bgMusic");
-
 const messages = [
   "Happy Birthday, sayangku Dedekk! 💖",
-  "Aku pengen bilaang, aku saaaayaaaangg banget sama kamu, cintakuuu, maniskuuu, duniakuuu, calon istrikuuu!!",
+  "Aku pengen bilang, aku saaaayaaaangg banget sama kamu, cintakuuu, maniskuuu, duniakuuu, calon istrikuuu!!",
   "Semoga di umur baru inii, semua impian dan wish list kitaa bisaa kita wujudkan bareengg, darii hal-hal keciill saampaaii hal-hal besaaarr.",
   "Aku selaluu pengen dedekk sehat, bahagia setiap harii, dan semoga kitaa bisa hidup lebih lamaaa bareng, ngelewatin semuaa hal seru, konyoll, dan maniiss yang bikin kitaa senyum teruss.",
   "Tetap jadii dirii dedekk sendirii, yaawwww dekk.",
@@ -269,15 +250,13 @@ const messages = [
   "Akuu seeneeeenggggg baangett bisaa nemenin dedekk, ngerayaiin harii spesiall dedekkk, dan akuu harap setiapp momen tahunn inii penuhh tawaa, kejutan kecill, dan cintaa yang makin dalam antara kitaa yaww sayangg.",
   "Wopyuuuu dedekk banyakk banyakkk saayangkuu cintakuu! 💖✨"
 ];
+const messageImages = ["l1.jpg","r1.jpg","l2.jpg","r2.jpg","l3.jpg","r3.jpg","l4.jpg","r4.jpg","l5.jpg"];
 
-// 9 foto kiri-kanan selang
-const messageImages = [
-  "l1.jpg","r1.jpg",
-  "l2.jpg","r2.jpg",
-  "l3.jpg","r3.jpg",
-  "l4.jpg","r4.jpg",
-  "l5.jpg"
-];
+function startIntro(){
+  document.getElementById("introOverlay").style.display = "none";
+  document.getElementById("step1").classList.remove("hidden");
+  document.getElementById("nameInput").focus();
+}
 
 function showMusicOverlay() {
   if(!musicAsked){
@@ -288,14 +267,12 @@ function showMusicOverlay() {
 
 function startMusic(){
   music.currentTime = 0;
-  music.play().catch(err=>console.log("Autoplay diblokir:", err));
-  closeOverlay();
+  music.play().catch(err=>console.log(err));
+  document.getElementById("musicOverlay").classList.add("hidden");
 }
 
-function skipMusic(){ closeOverlay(); }
-function closeOverlay(){
+function skipMusic(){
   document.getElementById("musicOverlay").classList.add("hidden");
-  document.getElementById("nameInput").focus();
 }
 
 function checkName(){
@@ -304,31 +281,30 @@ function checkName(){
   if(name==="sayang" || name==="dedek"){
     errorMsg.textContent="";
     document.getElementById("step1").classList.add("hidden");
-    document.getElementById("step2").classList.remove("hidden");
+    document.getElementById("step2a").classList.remove("hidden");
   } else {
     errorMsg.textContent="Nama salah! coba masukin nama panggilan lain.";
   }
 }
 
 function checkZaky(){
-  const answer1 = document.getElementById("answerSelect1").value;
-  if(answer1 === "iya"){
+  const answer = document.getElementById("answerSelect1").value;
+  if(answer==="iya"){
     document.getElementById("step2a").classList.add("hidden");
     document.getElementById("step2b").classList.remove("hidden");
-  } else if(answer1 === "bukan"){
+  } else if(answer==="bukan"){
     alert("Jawaban salah! Kamu harus cewek Zaky 😅, mulai lagi dari nama.");
-    location.reload(); // balik ke step1
+    location.reload();
   } else {
     alert("Pilih dulu jawabanmu!");
   }
 }
 
 function verifyPink(){
-  const answer2 = document.getElementById("answerInput").value.trim().toLowerCase();
+  const answer = document.getElementById("answerInput").value.trim().toLowerCase();
   const result = document.getElementById("verifyResult");
   const nextBtn = document.getElementById("nextMessageBtn");
-
-  if(answer2 === "pink"){
+  if(answer==="pink"){
     result.textContent="✅ Terverifikasi";
     result.style.color="green";
     nextBtn.classList.remove("hidden");
@@ -340,73 +316,50 @@ function verifyPink(){
 }
 
 function goToMessages(){
-  document.getElementById("step2").classList.add("hidden");
+  document.getElementById("step2b").classList.add("hidden");
   document.getElementById("stepMessage").classList.remove("hidden");
   showMessages();
 }
 
-// Typewriter + foto kiri-kanan fade-in pelan
+// === Typewriter Pesan ===
 let msgIndex=0, charIndex=0, imgIndex=0;
 const messageBox = document.getElementById("messageBox");
-
 function showMessages(){
   msgIndex=0; charIndex=0; imgIndex=0; messageBox.innerHTML="";
   typeMessage();
 }
-
 function typeMessage(){
   if(msgIndex < messages.length){
     let currentMsg = messages[msgIndex];
-
     if(charIndex===0){
       const itemDiv = document.createElement("div");
       itemDiv.classList.add("message-item");
       itemDiv.classList.add(imgIndex % 2 === 0 ? "left" : "right");
-
       const p = document.createElement("p");
       p.classList.add("message-text");
       itemDiv.appendChild(p);
-
       if(imgIndex < messageImages.length){
         const img = document.createElement("img");
         img.src = messageImages[imgIndex];
         img.classList.add("message-img");
         itemDiv.appendChild(img);
-        setTimeout(()=>{
-          img.style.opacity = 1;
-          img.style.transform = "rotate(0deg)";
-        }, 200);
+        setTimeout(()=>{ img.style.opacity=1; img.style.transform="rotate(0deg)"; },200);
         imgIndex++;
       }
-
       messageBox.appendChild(itemDiv);
     }
-
     const p = messageBox.querySelector(".message-item:last-child .message-text");
-
     if(charIndex < currentMsg.length){
       p.textContent += currentMsg.charAt(charIndex);
       charIndex++;
-      setTimeout(typeMessage, 60);
+      setTimeout(typeMessage,60);
     } else {
       charIndex=0;
       msgIndex++;
-      setTimeout(typeMessage, 400);
+      setTimeout(typeMessage,400);
     }
   }
 }
 </script>
-  
-  <!-- Script overlay intro -->
-<script>
-function startIntro(){
-  document.getElementById("introOverlay").style.display = "none";
-  document.getElementById("nameInput").focus(); // langsung ke step nama
-}
-</script>
 </body>
 </html>
-
-
-
-
