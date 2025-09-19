@@ -289,12 +289,20 @@ function verifyAnswer(){
   const result = document.getElementById("verifyResult");
   const nextBtn = document.getElementById("nextMessageBtn");
 
-  if(answer1 === "iya" && answer2 === "pink"){
+  // cek pertanyaan cewek Zaky dulu
+  if(answer1 !== "iya"){
+    alert("Jawaban salah! Kamu harus cewek Zaky 😅, mulai lagi dari nama.");
+    location.reload(); // kembali ke step1
+    return;
+  }
+
+  // cek tebakan warna
+  if(answer2 === "pink"){
     result.textContent="✅ Terverifikasi";
     result.style.color="green";
     nextBtn.classList.remove("hidden");
   } else {
-    result.textContent="❌ Tidak Terverifikasi";
+    result.textContent="❌ Warna salah! Coba lagi.";
     result.style.color="red";
     nextBtn.classList.add("hidden");
   }
@@ -359,5 +367,6 @@ function typeMessage(){
 </script>
 </body>
 </html>
+
 
 
