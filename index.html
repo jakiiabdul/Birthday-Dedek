@@ -43,32 +43,36 @@ button {
 button:hover { background: #ff758c; }
 .hidden { display: none !important; }
 .result { font-weight: bold; margin-top: 15px; font-size: 16px; }
-.message-box { 
-  min-height: 120px; 
-  margin: 15px 0; 
-  font-size: 15px; 
-  line-height: 1.4em; 
-  display: flex; 
-  flex-direction: column; 
-  gap: 15px; 
-}
-.message-text { text-align:center; }
 
-img {
-  width: 80px;
-  height: 80px;
+.message-box { 
+  display: flex;
+  flex-direction: column;
+  gap: 25px; 
+  margin-top: 20px;
+}
+
+.message-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.message-text {
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.5em;
+}
+
+.message-img {
+  width: 120px; /* lebih besar */
+  height: 120px;
   object-fit: cover;
-  opacity:0;
-  transition: all 0.6s ease;
-  border-radius:5px;
-}
-.left { 
-  align-self: flex-start; 
-  transform: translateX(-50px);
-}
-.right { 
-  align-self: flex-end; 
-  transform: translateX(50px);
+  border-radius: 12px;
+  opacity: 0;
+  transform: rotate(-5deg); /* miring dikit */
+  transition: opacity 2s ease, transform 1.5s ease;
+  margin-top: 5px;
 }
 
 /* Musik Overlay */
@@ -163,7 +167,7 @@ const messages = [
   "Wopyuu ssaayangkuu cintakuuy! 💖✨"
 ];
 
-// 6 foto kiri-kanan selang-seling
+// 6 foto
 const messageImages = ["l1.jpg","r1.jpg","l2.jpg","r2.jpg","l3.jpg","r3.jpg"];
 
 function showMusicOverlay() {
@@ -222,7 +226,7 @@ function goToMessages(){
   showMessages();
 }
 
-// Typewriter + foto kiri-kanan muncul pelan-pelan
+// Typewriter + foto bersamaan
 let msgIndex=0, charIndex=0, imgIndex=0;
 const messageBox = document.getElementById("messageBox");
 
@@ -234,36 +238,43 @@ function showMessages(){
 function typeMessage(){
   if(msgIndex < messages.length){
     let currentMsg = messages[msgIndex];
+
+    // Buat container teks + gambar
     if(charIndex===0){
+      const itemDiv = document.createElement("div");
+      itemDiv.classList.add("message-item");
+
       const p = document.createElement("p");
       p.classList.add("message-text");
-      messageBox.appendChild(p);
+      itemDiv.appendChild(p);
+
+      // tambahkan gambar jika masih ada
+      if(imgIndex < messageImages.length){
+        const img = document.createElement("img");
+        img.src = messageImages[imgIndex];
+        img.classList.add("message-img");
+        itemDiv.appendChild(img);
+        // fade in pelan
+        setTimeout(()=>{
+          img.style.opacity = 1;
+          img.style.transform = "rotate(0deg)";
+        }, 200); // mulai fade
+        imgIndex++;
+      }
+
+      messageBox.appendChild(itemDiv);
     }
 
-    const p = messageBox.querySelector("p:last-child");
+    const p = messageBox.querySelector(".message-item:last-child .message-text");
 
     if(charIndex < currentMsg.length){
       p.textContent += currentMsg.charAt(charIndex);
       charIndex++;
-      setTimeout(typeMessage, 60); // kecepatan ketik
+      setTimeout(typeMessage, 60);
     } else {
       charIndex=0;
       msgIndex++;
-      // tampilkan foto setelah teks tertentu
-      if(imgIndex < messageImages.length){
-        const img = document.createElement("img");
-        img.src = messageImages[imgIndex];
-        img.classList.add(imgIndex%2===0 ? "left" : "right"); // kiri-kanan selang-seling
-        messageBox.appendChild(img);
-        setTimeout(()=>{
-          img.style.opacity = 1;
-          img.style.transform = "translateX(0)";
-          imgIndex++;
-          setTimeout(typeMessage, 500); // delay sebelum lanjut teks berikutnya
-        }, 300);
-      } else {
-        setTimeout(typeMessage, 400);
-      }
+      setTimeout(typeMessage, 400);
     }
   }
 }
