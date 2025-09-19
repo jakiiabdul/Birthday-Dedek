@@ -6,7 +6,7 @@
 <title>Birthday Dedekk</title>
 <style>
 body {
-  font-family: 'Comic Sans MS', cursive, sans-serif; /* font lucu */
+  font-family: 'Comic Sans MS', cursive, sans-serif;
   background: url("dedekk.jpg") no-repeat center center fixed;
   background-size: cover;
   display: flex;
@@ -47,7 +47,7 @@ button:hover { background: #ff758c; }
 .message-box { 
   display: flex;
   flex-direction: column;
-  gap: 30px; 
+  gap: 40px; 
   margin-top: 20px;
 }
 
@@ -55,8 +55,8 @@ button:hover { background: #ff758c; }
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 15px;
-  justify-content: center; /* default tengah */
+  gap: 20px;
+  justify-content: center;
 }
 
 .message-item.left { justify-content: flex-start; }
@@ -74,13 +74,13 @@ button:hover { background: #ff758c; }
 }
 
 .message-img {
-  width: 130px;
-  height: 130px;
+  width: 140px;
+  height: 140px;
   object-fit: cover;
   border-radius: 15px;
   opacity: 0;
   transform: rotate(-8deg);
-  transition: opacity 2s ease, transform 1.5s ease;
+  transition: opacity 2.5s ease, transform 1.5s ease;
 }
 
 .overlay {
@@ -166,8 +166,14 @@ const messages = [
   "Wopyuu ssaayangkuu cintakuuy! 💖✨"
 ];
 
-// 6 foto kiri-kanan selang
-const messageImages = ["l1.jpg","r1.jpg","l2.jpg","r2.jpg","l3.jpg","r3.jpg"];
+// 9 foto kiri-kanan selang
+const messageImages = [
+  "l1.jpg","r1.jpg",
+  "l2.jpg","r2.jpg",
+  "l3.jpg","r3.jpg",
+  "l4.jpg","r4.jpg",
+  "l5.jpg"
+];
 
 function showMusicOverlay() {
   if(!musicAsked){
@@ -241,7 +247,6 @@ function typeMessage(){
     if(charIndex===0){
       const itemDiv = document.createElement("div");
       itemDiv.classList.add("message-item");
-      // kiri-kanan selang
       itemDiv.classList.add(imgIndex % 2 === 0 ? "left" : "right");
 
       const p = document.createElement("p");
