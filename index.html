@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Birthday Echa</title>
+<title>Birthday Dedekk</title>
 <style>
 body {
   font-family: Arial, sans-serif;
@@ -77,7 +77,7 @@ button:hover { background: #ff758c; }
 <body>
 
 <div class="container">
-  <h2>🎂 Selamat Ulang Tahun Echa 🎂</h2>
+  <h2>🎂 Selamat Ulang Tahun Dedekk! 🎂</h2>
 
   <!-- Step 1: Nama -->
   <div id="step1">
@@ -124,15 +124,15 @@ button:hover { background: #ff758c; }
 let musicAsked = false;
 const music = document.getElementById("bgMusic");
 const messages = [
-  "Happy Birthday, sayangku Dedekk! 💖"
-  "Aku pengen bilang, aku sayang banget sama kamu, cintaku, manisku, duniaku, calon istriku."
-  "Semoga di umur baru ini semua impian dan wish list kita bisa kita wujudkan bareng, dari hal-hal kecil sampai hal-hal besar."
-  "Aku selalu pengen kamu sehat, bahagia setiap hari, dan semoga kita bisa hidup lebih lama bareng, ngelewatin semua hal seru, konyol, dan manis yang bikin kita senyum terus."
-  "Tetap jadi diri kamu sendiri, ya."
-  "Kamu nggak pernah sendiri, aku selalu ada di sampingmu, walaupun kadang jarak memisahkan kita."
-  "Terima kasih udah selalu jadi kamu yang lucu, manis, dan nggak tergantikan."
-  "Aku seneng banget bisa nemenin kamu, ngerayain hari spesialmu, dan aku harap setiap momen tahun ini penuh tawa, kejutan kecil, dan cinta yang makin dalam antara kita."
-  "Wopyuu saayangkuu cintakuu! 💖✨"
+  "Happy Birthday, sayangku Dedekk! 💖",
+  "Akuu pengen bilaangg, aku saaaayaaaangg banget sama kamu, cintakuuu, maniskuuu, duniakuuu, calon istrikuuu.",
+  "Semoga di umur baru inii semua impian dan wish list kita bisa kita wujudkan bareng, dari hal-hal kecil sampai hal-hal besar.",
+  "Aku selalu pengen kamu sehat, bahagia setiap hari, dan semoga kita bisa hidup lebih lama bareng, ngelewatin semua hal seru, konyol, dan manis yang bikin kita senyum terus.",
+  "Tetap jadi diri kamu sendiri, ya.",
+  "Kamu nggak pernah sendiri, aku selalu ada di sampingmu, walaupun kadang jarak memisahkan kita.",
+  "Terima kasih udah selalu jadi kamu yang lucu, manis, dan nggak tergantikan.",
+  "Aku seneng banget bisa nemenin kamu, ngerayain hari spesialmu, dan aku harap setiap momen tahun ini penuh tawa, kejutan kecil, dan cinta yang makin dalam antara kita.",
+  "Wopyuu saayangkuu cintakuu!! 💖✨"
 ];
 
 function showMusicOverlay() {
@@ -157,7 +157,7 @@ function closeOverlay(){
 function checkName(){
   const name = document.getElementById("nameInput").value.trim().toLowerCase();
   const errorMsg = document.getElementById("errorMsg");
-  if(name==="dedek"){
+  if(name==="echa" || name==="dedekk"){
     errorMsg.textContent="";
     document.getElementById("step1").classList.add("hidden");
     document.getElementById("step2").classList.remove("hidden");
