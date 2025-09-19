@@ -22,6 +22,8 @@ body {
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
   text-align: center;
   width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 input, select, button {
   margin: 10px 0;
@@ -41,10 +43,18 @@ button {
 button:hover { background: #ff758c; }
 .hidden { display: none !important; }
 .result { font-weight: bold; margin-top: 15px; font-size: 16px; }
-.message-box { min-height: 120px; margin: 15px 0; font-size: 15px; line-height: 1.4em; text-align: center; display:flex; justify-content: space-between; align-items: center; }
-.img-left, .img-right { display: flex; flex-direction: column; gap:5px; }
-.img-left img, .img-right img { width: 60px; height: 60px; object-fit: cover; opacity:0; transition: opacity 0.5s; border-radius:5px; }
-.message-text { flex:1; margin:0 10px; text-align:center; }
+.message-box { min-height: 120px; margin: 15px 0; font-size: 15px; line-height: 1.4em; text-align: center; display:flex; flex-direction: column; gap: 15px; }
+
+img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  opacity:0;
+  transition: opacity 0.5s;
+  border-radius:5px;
+  margin:5px auto;
+}
+.message-text { text-align:center; }
 .overlay {
   position: fixed;
   top:0; left:0;
@@ -135,10 +145,9 @@ const messages = [
   "Wopyuu ssaayangkuu cintakuuy! 💖✨"
 ];
 
-const messageImages = {
-  left: ["l1.jpg","l2.jpg","l3.jpg"],
-  right: ["r1.jpg","r2.jpg","r3.jpg"]
-};
+const messageImages = [
+  "l1.jpg", "r1.jpg", "l2.jpg", "r2.jpg", "l3.jpg", "r3.jpg"
+];
 
 function showMusicOverlay() {
   if(!musicAsked){
@@ -196,66 +205,47 @@ function goToMessages(){
   showMessages();
 }
 
-// Typewriter + fade-in foto
-let msgIndex=0, charIndex=0;
+// Typewriter + foto muncul satu per satu ke bawah
+let msgIndex=0, charIndex=0, imgIndex=0;
 const messageBox = document.getElementById("messageBox");
 
 function showMessages(){
-  msgIndex=0; charIndex=0; messageBox.innerHTML="";
+  msgIndex=0; charIndex=0; imgIndex=0; messageBox.innerHTML="";
   typeMessage();
 }
 
 function typeMessage(){
-  if(msgIndex<messages.length){
-    const currentMsg = messages[msgIndex];
+  if(msgIndex < messages.length){
+    let currentMsg = messages[msgIndex];
+    // buat paragraph baru jika charIndex=0
     if(charIndex===0){
-      const msgDiv = document.createElement("div");
-      msgDiv.classList.add("msg");
-
-      // kiri
-      const leftDiv = document.createElement("div");
-      leftDiv.classList.add("img-left");
-      messageImages.left.forEach(src=>{
-        const img = document.createElement("img");
-        img.src=src;
-        leftDiv.appendChild(img);
-      });
-      msgDiv.appendChild(leftDiv);
-
-      // teks
-      const textSpan = document.createElement("span");
-      textSpan.classList.add("message-text");
-      msgDiv.appendChild(textSpan);
-
-      // kanan
-      const rightDiv = document.createElement("div");
-      rightDiv.classList.add("img-right");
-      messageImages.right.forEach(src=>{
-        const img = document.createElement("img");
-        img.src=src;
-        rightDiv.appendChild(img);
-      });
-      msgDiv.appendChild(rightDiv);
-
-      messageBox.appendChild(msgDiv);
+      const p = document.createElement("p");
+      p.classList.add("message-text");
+      messageBox.appendChild(p);
     }
 
-    const p = document.querySelector(".msg:last-child .message-text");
-    const imgs = document.querySelectorAll(".msg:last-child img");
+    const p = messageBox.querySelector("p:last-child");
 
-    if(charIndex<currentMsg.length){
+    if(charIndex < currentMsg.length){
       p.textContent += currentMsg.charAt(charIndex);
       charIndex++;
-
-      // fade-in seiring teks
-      const progress = charIndex / currentMsg.length;
-      imgs.forEach(img => img.style.opacity = progress);
-
       setTimeout(typeMessage, 80);
     } else {
-      msgIndex++;
       charIndex=0;
-      setTimeout(typeMessage, 1200);
+      // tampilkan foto satu per satu setelah teks
+      if(imgIndex < messageImages.length){
+        const img = document.createElement("img");
+        img.src = messageImages[imgIndex];
+        messageBox.appendChild(img);
+        setTimeout(()=>{
+          img.style.opacity = 1;
+          imgIndex++;
+          setTimeout(typeMessage, 400); // delay sebelum next foto/teks
+        },100);
+      } else {
+        msgIndex++;
+        setTimeout(typeMessage, 600);
+      }
     }
   }
 }
