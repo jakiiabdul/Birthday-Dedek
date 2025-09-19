@@ -156,17 +156,23 @@ button:hover { background: #ff758c; }
     <p id="errorMsg" style="color:red;"></p>
   </div>
 
-  <div id="step2" class="hidden">
-    <p>Kamu ceweknya Zaky apa bukan?</p>
-    <select id="answerSelect">
-      <option value="">-- Pilih jawaban --</option>
-      <option value="iya">Iya</option>
-      <option value="bukan">Bukan</option>
-    </select>
-    <button onclick="verifyAnswer()">Verifikasi</button>
-    <p class="result" id="verifyResult"></p>
-    <button id="nextMessageBtn" class="hidden" onclick="goToMessages()">Lanjut ➡️</button>
-  </div>
+ <div id="step2" class="hidden">
+  <!-- Pertanyaan cewek Zaky -->
+  <p>Kamu ceweknya Zaky apa bukan?</p>
+  <select id="answerSelect1">
+    <option value="">-- Pilih jawaban --</option>
+    <option value="iya">Iya</option>
+    <option value="bukan">Bukan</option>
+  </select>
+
+  <!-- Pertanyaan tebakan warna -->
+  <p>Aku masih gayakin kalo ini Dedekk. Coba tebak apa warna kesukaan Dedekk?</p>
+  <input type="text" id="answerInput" placeholder="Tebak warna kesukaan">
+
+  <button onclick="verifyAnswer()">Verifikasi</button>
+  <p class="result" id="verifyResult"></p>
+  <button id="nextMessageBtn" class="hidden" onclick="goToMessages()">Lanjut ➡️</button>
+</div>
 
   <div id="stepMessage" class="hidden">
     <div id="messageBox" class="message-box"></div>
@@ -278,20 +284,18 @@ function checkName(){
 }
 
 function verifyAnswer(){
-  const answer = document.getElementById("answerSelect").value;
+  const answer1 = document.getElementById("answerSelect1").value;
+  const answer2 = document.getElementById("answerInput").value.trim().toLowerCase();
   const result = document.getElementById("verifyResult");
   const nextBtn = document.getElementById("nextMessageBtn");
-  if(answer==="iya"){
+
+  if(answer1 === "iya" && answer2 === "pink"){
     result.textContent="✅ Terverifikasi";
     result.style.color="green";
     nextBtn.classList.remove("hidden");
-  } else if(answer==="bukan"){
+  } else {
     result.textContent="❌ Tidak Terverifikasi";
     result.style.color="red";
-    nextBtn.classList.add("hidden");
-  } else {
-    result.textContent="Pilih dulu jawabannya!";
-    result.style.color="orange";
     nextBtn.classList.add("hidden");
   }
 }
@@ -355,3 +359,4 @@ function typeMessage(){
 </script>
 </body>
 </html>
+
